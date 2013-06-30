@@ -1,0 +1,109 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>Flot Examples: Categories</title>
+	<link href="flot/examples/examples.css" rel="stylesheet" type="text/css">
+	<!--[if lte IE 8]><script language="javascript" type="text/javascript" src="../../excanvas.min.js"></script><![endif]-->
+	<script language="javascript" type="text/javascript" src="flot/jquery.js"></script>
+	<script language="javascript" type="text/javascript" src="flot/jquery.flot.js"></script>
+	<script language="javascript" type="text/javascript" src="flot/jquery.flot.categories.js"></script>
+	<script type="text/javascript">
+
+	$(function() {
+
+		var data = [ ["January", 10], ["February", 8], ["March", 4], ["April", 13], ["May", 17], ["June", 9] ];
+
+		$.plot("#placeholder", [ data ], {
+			series: {
+				bars: {
+					show: true,
+					barWidth: 0.6,
+					align: "center"
+				}
+			},
+			xaxis: {
+				mode: "categories",
+				tickLength: 0
+			}
+		});
+
+		// Add the Flot version string to the footer
+
+		$("#footer").prepend("Flot " + $.plot.version + " &ndash; ");
+	});
+
+	</script>
+</head>
+<body>
+
+	<div id="header">
+		<h2>Categories</h2>
+	</div>
+
+	<div id="content">
+
+		<div class="demo-container">
+			<div id="placeholder" class="demo-placeholder"></div>
+		</div>
+
+		<p>With the categories plugin you can plot categories/textual data easily.</p>
+
+	</div>
+
+  <div id="tab">
+ 
+</div>
+<script>
+var chart = new Array;
+//chart.push([0, 1]);
+//chart.push([1, 3]);
+//chart.push([2, 5]);
+//alert(chart[2]);
+(function() {
+  //var flickerAPI = "http://api.flickr.com/services/feeds/photos_public.gne?jsoncallback=?";
+  var flickerAPI = "http://127.0.0.1/mysql.php";
+  $.getJSON( flickerAPI, {
+    tags: "id",
+    tagmode: "any",
+    format: "json"
+  })
+  .done(function( data ) {
+   //alert("ok" + data[3]);
+   //$("#tab").text("<table>");
+   $("#tab").text("<table>");
+   $("#tab").append("<table>");
+    $.each( data, function( i, item ) {
+	//alert("ok" + i + item["time"]);
+      //$( "<temperature/>" ).attr( "src", item.media.m ).appendTo( "#id" );
+      $("#tab").append("<tr><td>" + item["id"] + "</td><td>" + item["time"] + "</td><td>" + item["temp"] + "</td></tr>");
+	chart.push([i,  item["temp"]]);
+    });
+    $("#tab").append("</table>");
+		$.plot("#placeholder", [ chart ], {
+			series: {
+				bars: {
+					show: true,
+					barWidth: 0.6,
+					align: "center"
+				}
+			},
+			xaxis: {
+				mode: "categories",
+				tickLength: 0
+			}
+		});
+
+		// Add the Flot version string to the footer
+
+		$("#footer").prepend("Flot " + $.plot.version + " &ndash; ");
+		alert(chart["3"]);
+  });
+})();
+</script>
+	<div id="footer">
+		Copyright &copy; 2007 - 2013 IOLA and Ole Laursen
+	</div>
+
+</body>
+</html>

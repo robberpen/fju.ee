@@ -1,0 +1,18 @@
+<html>
+<title>
+jquery
+</title>
+
+<body>
+<h2>hello jQuery</h1>
+<script type="text/javascript" src="jquery-1.10.1.js">
+var jqxhr = $.getJSON('ajax/http://127.0.0.1/mysql.php',{}, function(data) {
+  console.log( "success" );
+})
+.done(function() { alert("ok"); console.log( "second success" ); })
+.fail(function() { console.log( "error" ); })
+.always(function() { console.log( "complete" ); });
+jqxhr.complete(function() { console.log( "second complete" ); });
+</script>
+</body>
+</html>

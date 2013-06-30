@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>temperature{ height: 100px; float: left; }</style>
+  <script src="jquery-1.10.1.js"></script>
+</head>
+<body>
+  <div id="tab">
+ 
+</div>
+<script>
+(function() {
+  //var flickerAPI = "http://api.flickr.com/services/feeds/photos_public.gne?jsoncallback=?";
+  var flickerAPI = "http://127.0.0.1/mysql.php";
+  $.getJSON( flickerAPI, {
+    tags: "id",
+    tagmode: "any",
+    format: "json"
+  })
+  .done(function( data ) {
+   //alert("ok" + data[3]);
+   //$("#tab").text("<table>");
+   $("#tab").text("<table>");
+   $("#tab").append("<table>");
+    $.each( data, function( i, item ) {
+	//alert("ok" + i + item["time"]);
+      //$( "<temperature/>" ).attr( "src", item.media.m ).appendTo( "#id" );
+      $("#tab").append("<tr><td>" + item["id"] + "</td><td>" + item["time"] + "</td><td>" + item["temp"] + "</td></tr>");
+    });
+    $("#tab").append("</table>");
+  });
+})();
+</script>
+ 
+</body>
+</html>
