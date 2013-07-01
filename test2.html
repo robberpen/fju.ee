@@ -1,4 +1,5 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <title>
 jquery
 </title>
@@ -6,18 +7,16 @@ jquery
 <body>
 <h2>hello jQuery</h1>
 <script type="text/javascript" src="jquery-1.10.1.min.js">
-$.getJSON('mysql.php', function(data) {
-  var items = [];
- 
-  $.each(data, function(key, val) {
-    items.push('<li id="' + key + '">' + val + '</li>');
-  });
- 
-  $('<ul/>', {
-    'class': 'my-new-list',
-    html: items.join('')
-  }).appendTo('body');
-});
 </script>
+<form action=mysql.php method="POST">
+Display Interval<select name="interval">
+  <option>hourly</option>
+  <option>daily</option>
+  <option>weekly</option>
+  <option>monthly</option>
+</select>
+Day: <input type="date" name=date>
+Hour: <input type=text name=hour>
+Query <input type=submit>
 </body>
 </html>
