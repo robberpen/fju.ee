@@ -3,10 +3,15 @@
 <title>
 jquery
 </title>
-
+<script type="text/javascript" src="jquery-1.10.1.min.js">
+</script>
 <body>
 <h2>hello jQuery</h1>
-<script type="text/javascript" src="jquery-1.10.1.min.js">
+<script>
+function update_data__()
+{
+	alert("update");
+}
 </script>
 <form action=mysql.php method="POST">
 Display Interval<select name="interval">
@@ -17,6 +22,9 @@ Display Interval<select name="interval">
 </select>
 Day: <input type="date" name=date>
 Hour: <input type=text name=hour>
-Query <input type=submit>
+Query <input type="button" onclick="update_data__()" value="Query" id="query">
+</form>
+<form>
+</form>
 </body>
 </html>

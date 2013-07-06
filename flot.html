@@ -23,7 +23,7 @@ function update_data()
 	fetch();
 }
 </script>
-<form>
+<form align="right">
 Display Interval<select name="interval">
   <option>hourly</option>
   <option>daily</option>
@@ -32,7 +32,8 @@ Display Interval<select name="interval">
 </select>
 Day: <input type="date" name=date>
 Hour: <input type=text name=hour>
-Query <input type="button" onclick="update_data()" value="Query" id="query">
+&nbsp;&nbsp;<input type="button" onclick="update_data()" value="Query" id="query">&nbsp;&nbsp;&nbsp;&nbsp;
+Update interval:  <input type=text name=update_intval> Minute&nbsp;&nbsp;&nbsp;&nbsp;
 </form>
 	<div id="header">
 		<h2>Categories</h2>
@@ -42,8 +43,10 @@ Query <input type="button" onclick="update_data()" value="Query" id="query">
 
 		<div class="demo-container">
 			<div id="placeholder" class="demo-placeholder"></div>
-			<div id="placeholder2" class="demo-placeholder"></div>
 		</div>
+		<div class="demo-container">
+			<div id="placeholder2" class="demo-placeholder"></div>
+		<div class="demo-container">
 
 		<p>With the categories plugin you can plot categories/textual data easily.</p>
 
