@@ -19,11 +19,11 @@ if($id != null && $pw != null && $id == "admin" && $pw == "123456")
         $_SESSION['username'] = $id;
         //$_SESSION['username'] = $id;
         echo '<enter>success!</center>';
-        echo '<meta http-equiv=REFRESH CONTENT=1;url=member.php>';
+        echo '<meta http-equiv=REFRESH CONTENT=1;url=flot.html>';
 }
 else
 {
         echo '<center>fail</center>';
-        echo '<meta http-equiv=REFRESH CONTENT=1;url=index.php>';
+        echo '<meta http-equiv=REFRESH CONTENT=1;url=index.html>';
 }
 ?>

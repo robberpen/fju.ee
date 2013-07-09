@@ -34,6 +34,7 @@ Day: <input type="date" name=date>
 Hour: <input type=text name=hour>
 &nbsp;&nbsp;<input type="button" onclick="update_data()" value="Query" id="query">&nbsp;&nbsp;&nbsp;&nbsp;
 Update interval:  <input type=text name=update_intval> Minute&nbsp;&nbsp;&nbsp;&nbsp;
+		<br><br><hr color=#f00; background-color=#f00; height= 5px><br>
 </form>
 	<div id="header">
 		<h2>Categories</h2>
@@ -44,13 +45,16 @@ Update interval:  <input type=text name=update_intval> Minute&nbsp;&nbsp;&nbsp;&
 		<div class="demo-container">
 			<div id="placeholder" class="demo-placeholder"></div>
 		</div>
+	</div>
+		<hr color=#f00; background-color=#f00; height= 5px>
+	<div id="content">
 		<div class="demo-container">
 			<div id="placeholder2" class="demo-placeholder"></div>
-		<div class="demo-container">
+		</div>
+	</div>
 
 		<p>With the categories plugin you can plot categories/textual data easily.</p>
 
-	</div>
 
   <div id="tab">
  
@@ -79,7 +83,7 @@ $.ajax({
 	chart.push([i, item["temp"]]);
     });
     $("#tab").append("</table>");
-		$.plot("#placeholder", [ chart ], {
+		$.plot("#placeholder", [ {data: chart, label: "templature", color: "#333" }], {
 			series: {
 				bars: {
 					show: true,
