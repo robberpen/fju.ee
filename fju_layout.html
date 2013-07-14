@@ -1,0 +1,100 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>Flot Examples: Categories</title>
+	<link href="flot/examples/examples.css" rel="stylesheet" type="text/css">
+	<!--[if lte IE 8]><script language="javascript" type="text/javascript" src="../../excanvas.min.js"></script><![endif]-->
+	<script language="javascript" type="text/javascript" src="flot/jquery.js"></script>
+	<script language="javascript" type="text/javascript" src="flot/jquery.flot.js"></script>
+	<script language="javascript" type="text/javascript" src="flot/jquery.flot.categories.js"></script>
+	<script type="text/javascript">
+
+
+	</script>
+</head>
+<body onload=update_data()>
+
+<form method=POST action="fju_mysql_adv.php">
+  <div id="tab"> </div>
+		<br><br><hr color=#011; background-color=#f00; height= 5px><br>
+Display Interval<select name="interval">
+  <option>hourly</option>
+  <option>daily</option>
+  <option>weekly</option>
+  <option>monthly</option>
+</select>
+Start Day: <input type="date" name=start_date>
+Hour: <input type=text name=end_hour>
+End Day: <input type="date" name=end_date>
+Hour: <input type=text name=end_hour><br>
+&nbsp;&nbsp;<input type="button" onclick="show()" value="Query" id="query">&nbsp;&nbsp;&nbsp;&nbsp;
+Update interval:  <input type=text name=update_intval> 
+peroid:  <input type=text name=peroid> 
+sample Interval<select name="unit">
+  <option>Minute</option>
+  <option>Hour</option>
+  <option>Day</option>
+</select>
+
+&nbsp;&nbsp;&nbsp;&nbsp;
+		<br><br><hr color=#f00; background-color=#f00; height= 5px><br>
+</form>
+<script>
+function show()
+{
+	alert("update: " +  $("form").serialize());
+	document.forms[0].submit();
+}
+function update_data()
+{
+	fetch();
+}
+</script>
+<div id="debug"></div>
+ 
+<script>
+function fetch() {
+$.ajax({
+  url: "fju_mysql.php",
+  type: "POST",
+  data:  $("form").serialize(),
+  dataType: "json",
+  success: function(data) {
+	layout= '<table border="1" align=center bgcolor=blue width=90%> ';
+	document.getElementById('debug').innerHTML = "size: " +  data.length + "</br>";
+	$.each( data, function( i, item ) {
+		layout += "<tr board=1><td>" + item[0].TreeID + "</td><td>" + item[0].TreeDescription + "</td>";
+		document.getElementById('debug').innerHTML += "->size: " +  item.length + ",TreeID: " +  item[0].TreeID  + ", Desc: " + item[0].TreeDescription + ",len: " + item[1].length + "</br>";
+		$.each(item[1], function(i, val) {
+			if (val.Type == 'temperature')
+				icon = "<img src=images/icon_tempSensor_60px.png></img>";
+			else if (val.Type == 'watt')
+				icon = "<img src=images/icon_powerModule_60px.png></img>";
+			else if (val.Type == 'root')
+				icon = "<img src=images/icon_computer_60px.png ></img>";
+			else
+				icon = val.Type;
+
+			layout += "<td><input type=checkbox name=\"draw[]\" value=" + val.TreeID + "-" + val.LeafID + ">" + val.LeafID + " " + icon + ": " + val.LeafDescription + "</td>";
+			document.getElementById('debug').innerHTML += "->key: " +  i  + "|" + val.TreeID + "|LeafID: " + val.LeafID + "</br>";
+		});
+		layout += "</tr>";
+	});
+	/* output */
+	$("#tab").append(layout);
+    },
+    error: function(xhr, ajaxOptions, thrownError) {
+	alert(xhr.status);
+	alert(thrownError);
+	}
+    });
+	document.getElementById('tab').innerHTML += "</table>";
+}
+</script>
+	<div id="footer">
+		Copyright &copy; 2013 - 2013 fju.edu.tw
+	</div>
+
+</body>
+</html>
