@@ -13,8 +13,9 @@
 
 	</script>
 </head>
-<body onload=update_data()>
-
+<body onload=fetch()>
+<div id=paint>
+</div>
 <form method=POST action="fju_mysql_adv.php">
   <div id="tab"> </div>
 		<br><br><hr color=#011; background-color=#f00; height= 5px><br>
@@ -28,13 +29,14 @@ Start Day: <input type="date" name=start_date>
 Hour: <input type=text name=end_hour>
 End Day: <input type="date" name=end_date>
 Hour: <input type=text name=end_hour><br>
-&nbsp;&nbsp;<input type="button" onclick="show()" value="Query" id="query">&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;<input type="button" onclick="redraw()" value="Query" id="query">&nbsp;&nbsp;&nbsp;&nbsp;
 Update interval:  <input type=text name=update_intval> 
 peroid:  <input type=text name=peroid> 
 sample Interval<select name="unit">
   <option>Minute</option>
   <option>Hour</option>
   <option>Day</option>
+&nbsp;&nbsp;<input type="button" onclick="show()" value="debug" id="devel_debug">&nbsp;&nbsp;&nbsp;&nbsp;
 </select>
 
 &nbsp;&nbsp;&nbsp;&nbsp;
@@ -43,14 +45,66 @@ sample Interval<select name="unit">
 <script>
 function show()
 {
-	alert("update: " +  $("form").serialize());
+	//alert("update: " +  $("form").serialize());
 	document.forms[0].submit();
 }
-function update_data()
+function redraw()
 {
-	fetch();
+	//alert("update: " +  $("form").serialize());
+	$.ajax({
+	url: "fju_mysql_adv.php",
+	type: "POST",
+	data:  $("form").serialize(),
+	dataType: "json",
+	success: function(data) {
+		//alert("success");
+		document.getElementById('debug2').innerHTML += "->size[ " +  data.length + "]<br>\n";
+		var painter = "";
+		for (var i = 0;i < data.length; i++) {
+			painter += '<div class="demo-container">';
+			painter += '<div id="xyz' + i + '" class="demo-placeholder"></div>';
+			painter += '</div>';
+		}
+		document.getElementById('paint').innerHTML = painter;
+			
+		$.each( data, function(index, item ) {
+			document.getElementById('debug2').innerHTML += "->size: " + item[0] +  ",TreeID: "  +  item.TreeID +  ", LeafIF: " + item.LeafID + "</br><hr>";
+			//document.getElementById('debug2').innerHTML += getElementById+ "<br>";
+			var happy = new Array;
+			var ind = 0;
+			for (var i in item[0]) {
+				document.getElementById('debug2').innerHTML += "[" + item[0][i]  + "}";
+				happy.push([ind, item[0][i]]);
+				ind += 1;
+			}
+			document.getElementById('debug2').innerHTML += "data: " + happy  + "</br><hr>";
+			//alert("index: " + index);
+			$.plot("#xyz" + index, [ {data: happy, label: item.TreeID + "-" + item.LeafID , color:  "#033"}], {
+				series: {
+					bars: {
+						show: true,
+						barWidth: 0.6,
+						align: "center"
+					}
+				},
+				xaxis: {
+					mode: "categories",
+					tickLength: 0
+				}
+			});
+			
+		});
+		/* output */
+		//$("#tab").append(layout);
+	},
+	error: function(xhr, ajaxOptions, thrownError) {
+	alert(xhr.status);
+	alert(thrownError);
+	}
+	});
 }
 </script>
+<div id="debug2"></div>
 <div id="debug"></div>
  
 <script>
@@ -83,6 +137,7 @@ $.ajax({
 	});
 	/* output */
 	$("#tab").append(layout);
+	document.getElementById('debug').innerHTML += "<br><br><hr color=#f00; background-color=#f00; height= 5px><br>";
     },
     error: function(xhr, ajaxOptions, thrownError) {
 	alert(xhr.status);
