@@ -2,3 +2,4 @@ SELECT * FROM Tree; // get TreeID and Desc
 SELECT * FROM LeafID; // get each type of each floor(Tree)
 SELECT * FROM Data; // by type and time range..
 image ref: http://gardenbot.org/howTo/
+time flot: http://www.pureexample.com/tw/flot-time-series-line-chart.html

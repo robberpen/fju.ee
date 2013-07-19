@@ -4,46 +4,44 @@ include 'config.php';
 include 'fju_connect.php';
 
 class param{
-	public $peroid, $unit;
+	public $peroid;
 	public $start_time, $end_time;
 
 	private function init_end_time()
 	{
 		$date = $_REQUEST["end_date"];	// fmt: YYYY-MM-DD
 		$hour = $_REQUEST["end_hour"];
+		//$min  = $_REQUEST["end_minute"];
 		if ($date == "")
 			$date = date("Y-m-d");
 		if ($hour == "")
 			$hour = date("H");
-		$this->end_time = DateTime::createFromFormat('Y-m-d H:i:s', "$date $hour:00:00");
+		$min = date("i");
+		$this->end_time = DateTime::createFromFormat('Y-m-d H:i:s', "$date $hour:$min:00");
 	}
 	private function init_start_time()
 	{
 		$date = $_REQUEST["start_date"]; // fmt: YYYY-MM-DD
 		$hour = $_REQUEST["start_hour"]; // fmt: HH
+		//$min  = $_REQUEST["start_minute"];
+		global $max_record;
+		$min = date("i");
 
-		if ($date == "") {
-			$date = date("Y-m-d");
-		}
 		if ($hour == "")
 			$hour = date("H");
-		
-		$this->start_time = DateTime::createFromFormat('Y-m-d H:i:s', "$date $hour:00:00");
-		$this->start_time->sub(new DateInterval('PT24H'));
-		
-	}
-	private function check()
-	{
-		/* by default: per 30 minutes from 24 hr to current time */
-		if ($this->peroid == "")
-			$this->peroid = 30;
-		if ($this->unit == "")
-			$this->unit = "H";	//"i": minutes interval
+		if ($date == "") {
+			$date = date("Y-m-d");
+			$this->start_time = DateTime::createFromFormat('Y-m-d H:i:s', "$date $hour:$min:00");
+			$this->start_time->sub(new DateInterval('PT' . $this->peroid * $max_record . 'M'));
+		} else
+			$this->start_time = DateTime::createFromFormat('Y-m-d H:i:s', "$date $hour:$min:00");
 	}
 	public function __construct()
 	{
 		$this->peroid = $_REQUEST["peroid"];
-		$this->unit = $_REQUEST["unit"];
+		/* by default: per 30 minutes from 24 hr to current time */
+		if ($this->peroid == "")
+			$this->peroid = 1;
 
 		$date = $_REQUEST["end_date"];
 		$hour = $_REQUEST["end_hour"];
@@ -55,7 +53,6 @@ class param{
 	{
 		echo "$msg<br>";
 		echo "peroid: " . $this->peroid ."<br>\n";
-		echo "unit: " . $this->init ."<br>\n";
 		echo "start_time: " . $this->start_time->format('Y-m-d H:i:s') ."<br>\n";
 		echo "end_time: " . $this->end_time->format('Y-m-d H:i:s') ."<br><br>\n";
 	}
@@ -70,12 +67,12 @@ function draw_data($param, $tree, $leaf)
 	$rows = array();
 	//$rows = array("TreeID" =>$tree, "LeafID" => $leaf);
 	//$rows[] = ["LeafID" => $leaf ];
-	for ($i  = 0;  $param->start_time < $param->end_time;$i += $peroid)
+	for ($i  = 0;  $param->start_time < $param->end_time; $i += $param->peroid)
 	{
 		if (!$limit--)
 			break;
 		$t1 = $param->start_time->format('Y-m-d H:i:s');
-		$param->start_time->add(new DateInterval('PT120M'));
+		$param->start_time->add(new DateInterval('PT' . $param->peroid . 'M'));
 		$t2 = $param->start_time->format('Y-m-d H:i:s');
 		
 		$range = "WHERE Data.DateTime > '$t1' AND Data.DateTime <= '$t2'";
@@ -104,9 +101,14 @@ if(!empty($_POST['draw'])) {
 	foreach($_POST['draw'] as $draw) {
 		$param = new param();
 		$d = explode("-", $draw);
+		//echo "$draw | $d[0] | $d[1] | $d[2] |<br>\n";
 		$tree = $d[0];
 		$leaf = $d[1];
-		$rows[] = array("TreeID" => $tree, "LeafID" => $leaf,draw_data($param, $tree, $leaf));
+		$rows[] = array("TreeID" => $tree, "LeafID" => $leaf, "Type" => $d[2], 
+			"start" => $param->start_time->format('Y-m-d H:i'),
+			"end" => $param->end_time->format('Y-m-d H:i'),
+			"minute" => $param->peroid,
+			draw_data($param, $tree, $leaf));
 		//$rows[] = draw_data($tree, $leaf);
 	}
 	print json_encode($rows);
