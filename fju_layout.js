@@ -48,7 +48,6 @@ function redraw()
 			//document.getElementById('debug2').innerHTML += "<br>data: " + happy  + "</br><hr>";
 			//alert("index: " + index);
 			$.plot("#xyz" + index, [ {data: happy, label: item.TreeID + "-" + item.LeafID + " " + item.start, color:  "#033"}], {
-			/*
 				series: {
 					bars: {
 						show: true,
@@ -56,7 +55,6 @@ function redraw()
 						align: "center"
 					}
 				},
-			*/
 				xaxis: {
 					//mode: "categories",
 					mode: "time",
@@ -112,7 +110,7 @@ $.ajax({
 			else
 				icon = val.Type;
 
-			layout += "<td><input type=checkbox name=\"draw[]\" value=" + val.TreeID + "-" + val.LeafID  + "-" + val.Type + ">" + val.LeafID + " " + icon + ": " + val.LeafDescription + "</td>";
+			layout += "<td><input type=checkbox name=\"draw[]\" value=" + val.TreeID + "-" + val.LeafID  + "-" + val.Type + ">" + val.LeafID + " " + icon + ": " + val.LeafDescription +  ":" + val.Data + "</td>";
 			//document.getElementById('debug').innerHTML += "->key: " +  i  + "|" + val.TreeID + "|LeafID: " + val.LeafID + "</br>";
 		});
 		layout += "</tr>";

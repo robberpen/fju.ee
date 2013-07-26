@@ -13,11 +13,11 @@ function show_tree()
 	//echo $intval."<br>";
 	//echo $date."<br>";
 	//echo $hour."<br>";
-	$result = mysql_query($q);
+	//$result = mysql_query($q);
 	$rows = array();
 	$output = array();
 	$rows2 = array();
-	while($tree = mysql_fetch_assoc($result)) {
+	while ($tree = mysql_fetch_assoc($result)) {
 		$rows[] = $tree;
 		$q = 'SELECT * FROM LeafID WHERE TreeID=' . $tree['TreeID'];
 		//echo $q . "<br>\n";
@@ -29,10 +29,10 @@ function show_tree()
 			continue;
 		}
 		while ($leaf = mysql_fetch_assoc($leaf_res)) {
-			$row2[] = $leaf;
-		//	foreach ($leaf as $info)
-		//		echo "$info |";
-		//	echo "<br>\n";
+			$range = "WHERE Data.DateTime > DATE_SUB(NOW(), INTERVAL 3 MINUTE)  AND Data.DateTime <= NOW()";
+			$q = 'SELECT ROUND(AVG(data), 1) AS Data FROM Data ' . $range . " AND LeafID=$leaf[LeafID] AND TreeID=$leaf[TreeID]";
+			$data = mysql_query($q);
+			$row2[] = array_merge($leaf, mysql_fetch_assoc($data));
 		}
 		$output[] = array($tree, $row2);
 
