@@ -4,7 +4,7 @@ include 'config.php';
 include 'fju_connect.php';
 
 class param{
-	public $peroid;
+	public $peroid, $records;
 	public $start_time, $end_time;
 
 	private function init_end_time()
@@ -24,7 +24,7 @@ class param{
 		$date = $_REQUEST["start_date"]; // fmt: YYYY-MM-DD
 		$hour = $_REQUEST["start_hour"]; // fmt: HH
 		//$min  = $_REQUEST["start_minute"];
-		global $max_record;
+		//global $max_record;
 		$min = date("i");
 
 		if ($hour == "")
@@ -32,16 +32,21 @@ class param{
 		if ($date == "") {
 			$date = date("Y-m-d");
 			$this->start_time = DateTime::createFromFormat('Y-m-d H:i:s', "$date $hour:$min:00");
-			$this->start_time->sub(new DateInterval('PT' . $this->peroid * $max_record . 'M'));
+			$this->start_time->sub(new DateInterval('PT' . $this->peroid * $this->records . 'M'));
 		} else
 			$this->start_time = DateTime::createFromFormat('Y-m-d H:i:s', "$date $hour:$min:00");
 	}
 	public function __construct()
 	{
+		global $max_record;
 		$this->peroid = $_REQUEST["peroid"];
 		/* by default: per 30 minutes from 24 hr to current time */
 		if ($this->peroid == "")
 			$this->peroid = 1;
+
+		$this->records = $_POST['records'];
+		if ($this->records == "" || $this->records >= $max_record)
+			$this->records = $max_record;
 
 		$date = $_REQUEST["end_date"];
 		$hour = $_REQUEST["end_hour"];
@@ -58,15 +63,36 @@ class param{
 	}
 };
 
+function data_irregular($where)
+{
+	$q = 'SELECT Status FROM Data ' . $where . " AND Status != 'regular'";
+	//echo $q. "<br>";
+	$result = mysql_query($q);
+	//$result = mysql_query('SELECT * FROM temp ORDER BY time DESC LIMIT 0 , 60');
+	if (!$result) {
+	    die('Invalid query: ' . mysql_error());
+	}
+	//$num_rows = mysql_num_rows($result);
+	//echo "num: ". $num_rows . "<br>\n";
+	return !mysql_num_rows($result);
+	//$row = array();
+	//while($r = mysql_fetch_assoc($result)) {
+	//    $rows[] = $r['data'];
+	//}
+
+}
 function draw_data($param, $tree, $leaf)
 {
 	//echo "draw### " . $draw . "as: " . $leaf . " and " . $tree . "</br>\n";
 	//$param->dump("Tree $tree " . "Leaf: $leaf<br>");
 	global $max_record;
-	$limit = $max_record;
+	$limit = $_POST['records'];
+	if ($limit > $max_record)
+		$limit = $max_record;
 	$rows = array();
 	//$rows = array("TreeID" =>$tree, "LeafID" => $leaf);
 	//$rows[] = ["LeafID" => $leaf ];
+	$test = 0;
 	for ($i  = 0;  $param->start_time < $param->end_time; $i += $param->peroid)
 	{
 		if (!$limit--)
@@ -75,8 +101,16 @@ function draw_data($param, $tree, $leaf)
 		$param->start_time->add(new DateInterval('PT' . $param->peroid . 'M'));
 		$t2 = $param->start_time->format('Y-m-d H:i:s');
 		
-		$range = "WHERE Data.DateTime > '$t1' AND Data.DateTime <= '$t2'";
-		$q = 'SELECT ROUND(AVG(data), 3) AS data FROM Data ' . $range . " AND LeafID=$leaf AND TreeID=$tree";
+
+		$where = "WHERE Data.DateTime > '$t1' AND Data.DateTime <= '$t2' AND LeafID=$leaf AND TreeID=$tree";
+		data_irregular($where);
+
+		//$q = 'SELECT ROUND(AVG(data), 3) AS data FROM Data ' . $where . " AND LeafID=$leaf AND TreeID=$tree";
+		$q = 'SELECT ROUND(AVG(data), 3) AS data FROM Data ' . $where ;
+		/* abnormal .. */
+		//$abnormal = $q . " AND Status != 'regular'";// Status   | enum('regular','irregular','nodata')
+		//echo $abnormal. "<br>";
+
 		//SELECT AVG(temp) FROM temp WHERE temp.time >= '2013-07-07 20:00:00' AND temp.time < '2013-07-07 20:30:00' ORDER BY time DESC LIMIT 0 , 60
 		//echo "<br> $q <br>\n";
 		//$result = mysql_query('SELECT * FROM temp ' . $range . ' ORDER BY time DESC LIMIT 0 , 60');
@@ -87,7 +121,11 @@ function draw_data($param, $tree, $leaf)
 		}
 		//$row = array();
 		while($r = mysql_fetch_assoc($result)) {
-		    $rows[] = $r['data'];
+		    if ($test++ == 3) {
+			$rows[] = array('Status' => 'abnormal', 'Data'=>$r['data']);
+			//$rows[] = $r['data'];
+		    } else
+			$rows[] = $r['data'];
 		}
 		//$rows[] = $row;
 		//print json_encode($rows);
@@ -95,7 +133,7 @@ function draw_data($param, $tree, $leaf)
 	return $rows;
 }
 
-if(!empty($_POST['draw'])) {
+if (!empty($_POST['draw'])) {
 	//print_r($_POST);
 	$rows = array();
 	foreach($_POST['draw'] as $draw) {

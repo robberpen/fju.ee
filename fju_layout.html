@@ -9,6 +9,7 @@
 	<script language="javascript" type="text/javascript" src="flot/jquery.flot.js"></script>
 	<script language="javascript" type="text/javascript" src="flot/jquery.flot.categories.js"></script>
 	<script language="javascript" type="text/javascript" src="flot/jquery.flot.time.js"></script>
+	<script language="javascript" type="text/javascript" src="flot/jquery.flot.errorbars.js"></script>
 	<script language="javascript" type="text/javascript" src="fju_layout.js"></script>
 	<script type="text/javascript">
 
@@ -20,6 +21,11 @@
 </div>
 <form method=POST action="fju_mysql_adv.php">
   <div id="tab"> </div>
+<br><h4>Quickly:</h4>
+<input type=button name=quick_hourly value=Hourly onclick="quick_hourly_show()" >
+<input type=button name=quick_daily value=Daily onclick="quick_daily_show()" >
+<input type=button name=quick_weekly value=Weekly onclick="quick_weekly_show()">
+<input type=button name=quick_monthly value=Monthly onclick="quick_monthly_show()">
 		<br><br><hr color=#011; background-color=#f00; height= 5px><br>
 <!-- Display Interval<select name="interval">
   <option>hourly</option>
@@ -27,12 +33,13 @@
   <option>weekly</option>
   <option>monthly</option>
 </select> -->
+<h4>Advance:</h4>
 Start Day: <input type="date" name=start_date>
 Hour: <input type=text name=start_hour><br>
 End Day: <input type="date" name=end_date>
 Hour: <input type=text name=end_hour><br>
+Peroid:  <input type=text name=peroid> record per minutes<br> total: <input type=text name=records value=120>
 &nbsp;&nbsp;<input type="button" onclick="redraw()" value="Query" id="query">&nbsp;&nbsp;&nbsp;&nbsp;
-peroid:  <input type=text name=peroid> 
 &nbsp;&nbsp;<input type="button" onclick="show()" value="debug" id="devel_debug">&nbsp;&nbsp;&nbsp;&nbsp;
 &nbsp;&nbsp;&nbsp;&nbsp;
 		<br><br><hr color=#f00; background-color=#f00; height= 5px><br>
