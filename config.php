@@ -5,4 +5,5 @@ $db_name="fju";
 $db_admin="root";
 $db_passord="";
 $max_record=120;	/* max record for each plot */
+$default_period=3;
 ?>

@@ -31,9 +31,18 @@ button {
 input {
 	font-size: 18px;
 }
-
 input[type=checkbox] {
 	margin: 7px;
+}
+
+input[type=button] {
+	color:#08233e;
+	font:2.4em Futura, Century Gothic, AppleGothic, sans-serif;
+	font-size:70%;
+	height: 50px;
+	width: 150px;
+	/* ... other rules ... */
+	cursor:pointer;
 }
 
 #header {

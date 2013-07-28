@@ -25,6 +25,7 @@ function quick_monthly_show()
 	document.getElementsByName("peroid")[0].value = 1440;
 	document.getElementsByName("records")[0].value = 31;
 	redraw();
+	//show();
 }
 function show()
 {
@@ -89,8 +90,7 @@ function redraw()
 				//happy.push([ind, item[0][i]]);
 				var item_data = 0;
 				if (typeof item[0][i] == 'object') {
-					//alert(typeof item[0][i] + ": " + item[0][i]['Data']);
-					item_data = item[0][i]['Data'];
+					item_data = item[0][i]?item[0][i]['Data']:null;
 					error.push([ms, item_data]);
 				} else {
 					item_data = item[0][i];
@@ -160,15 +160,20 @@ $.ajax({
 		console.log("->size: " +  item.length + ",TreeID: " +  item[0].TreeID  + ", Desc: " + item[0].TreeDescription + ",len: " + item[1].length);
 		$.each(item[1], function(i, val) {
 			if (val.Type == 'temperature')
-				icon = '<img src=images/icon_tempSensor_60px.png width=20% height=30% ></img>';
+				icon = '<img src=images/icon_tempSensor_60px.png width=30px height=30px></img>';
 			else if (val.Type == 'watt')
-				icon = "<img src=images/icon_powerModule_60px.png width=20% height=30%></img>";
+				icon = "<img src=images/icon_powerModule_60px.png width=30px height=30px></img>";
 			else if (val.Type == 'root')
-				icon = "<img src=images/icon_computer_60px.png width=20% height=30% ></img>";
+				icon = "<img src=images/icon_computer_60px.png width=30px height=30px ></img>";
 			else
 				icon = val.Type;
 
-			layout += "<td><input type=checkbox name=\"draw[]\" value=" + val.TreeID + "-" + val.LeafID  + "-" + val.Type + ">" + val.LeafID + " " + icon + ": " + val.LeafDescription +  ":<font color=green size=5px> " + val.Data + "</font></td>";
+			if (val.Status == 'regular')
+				st_icon = "<img src=images/120px-Green_Light_Icon.svg.png width=30px height=30px ></img>";
+			else
+				st_icon = "<img src=images/120px-Red_Light_Icon.svg.png width=30px height=30px ></img>";
+
+			layout += "<td><input type=checkbox name=\"draw[]\" value=" + val.TreeID + "-" + val.LeafID  + "-" + val.Type + ">" + val.LeafID + " " + icon + ": " + val.LeafDescription +  ":<font color=green size=5px> " + val.Data + "</font>" + st_icon + "</td>";
 			//document.getElementById('debug').innerHTML += "->key: " +  i  + "|" + val.TreeID + "|LeafID: " + val.LeafID + "</br>";
 		});
 		layout += "</tr>";

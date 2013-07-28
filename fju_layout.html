@@ -17,16 +17,18 @@
 	</script>
 </head>
 <body onload=fetch()>
+<br><br>
+<center>
 <div id=paint>
 </div>
 <form method=POST action="fju_mysql_adv.php">
   <div id="tab"> </div>
 <br><h4>Quickly:</h4>
-<input type=button name=quick_hourly value=Hourly onclick="quick_hourly_show()" >
+<input type=button name=quick_hourly value=Hourly onclick="quick_hourly_show()">
 <input type=button name=quick_daily value=Daily onclick="quick_daily_show()" >
 <input type=button name=quick_weekly value=Weekly onclick="quick_weekly_show()">
 <input type=button name=quick_monthly value=Monthly onclick="quick_monthly_show()">
-		<br><br><hr color=#011; background-color=#f00; height= 5px><br>
+<br><br><hr color=#011; background-color=#f00; height= 5px><br>
 <!-- Display Interval<select name="interval">
   <option>hourly</option>
   <option>daily</option>
@@ -44,6 +46,7 @@ Peroid:  <input type=text name=peroid> record per minutes<br> total: <input type
 &nbsp;&nbsp;&nbsp;&nbsp;
 		<br><br><hr color=#f00; background-color=#f00; height= 5px><br>
 </form>
+</center>
 <div id="debug2"></div>
  
 	<div id="footer">

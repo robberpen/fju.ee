@@ -1,6 +1,27 @@
 <?php
 include 'config.php';
 include 'fju_connect.php';
+
+function get_data_irregular($where)
+{
+	$q = 'SELECT Status FROM Data ' . $where . " AND Status != 'regular'";
+	//echo $q. "<br>";
+	$result = mysql_query($q);
+	//$result = mysql_query('SELECT * FROM temp ORDER BY time DESC LIMIT 0 , 60');
+	if (!$result) {
+	    die('Invalid query: ' . mysql_error());
+	}
+	//$num_rows = mysql_num_rows($result);
+	//echo "num: ". $num_rows . "<br>\n";
+	if (mysql_num_rows($result) > 0)
+		return mysql_fetch_assoc($result);
+	return array('Status' => 'regular');
+	//$row = array();
+	//while($r = mysql_fetch_assoc($result)) {
+	//    $rows[] = $r['data'];
+	//}
+
+}
 function show_tree()
 {
 	$q = 'select * from Tree ORDER BY TreeID DESC';
@@ -29,13 +50,14 @@ function show_tree()
 			continue;
 		}
 		while ($leaf = mysql_fetch_assoc($leaf_res)) {
-			$range = "WHERE Data.DateTime > DATE_SUB(NOW(), INTERVAL 3 MINUTE)  AND Data.DateTime <= NOW()";
-			$q = 'SELECT ROUND(AVG(data), 1) AS Data FROM Data ' . $range . " AND LeafID=$leaf[LeafID] AND TreeID=$leaf[TreeID]";
+			$where = "WHERE Data.DateTime > DATE_SUB(NOW(), INTERVAL 3 MINUTE)  AND Data.DateTime <= NOW() AND LeafID=$leaf[LeafID] AND TreeID=$leaf[TreeID]";
+			$q = 'SELECT ROUND(AVG(data), 1) AS Data FROM Data ' . $where;
+			//get_data_irregular($where));
+
 			$data = mysql_query($q);
-			$row2[] = array_merge($leaf, mysql_fetch_assoc($data));
+			$row2[] = array_merge($leaf, array_merge(mysql_fetch_assoc($data), get_data_irregular($where)));
 		}
 		$output[] = array($tree, $row2);
-
 	}
 	print json_encode($output);
 	//print json_encode($rows);
