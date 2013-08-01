@@ -92,7 +92,7 @@ function draw_data($param, $tree, $leaf)
 	$rows = array();
 	//$rows = array("TreeID" =>$tree, "LeafID" => $leaf);
 	//$rows[] = ["LeafID" => $leaf ];
-	//$test = 0;
+	$test = 0;
 	for ($i  = 0;  $param->start_time < $param->end_time; $i += $param->peroid)
 	{
 		if (!$limit--)
@@ -132,7 +132,7 @@ function draw_data($param, $tree, $leaf)
 	}
 	return $rows;
 }
-
+date_default_timezone_set('Asia/Taipei');
 if (!empty($_POST['draw'])) {
 	//print_r($_POST);
 	$rows = array();
