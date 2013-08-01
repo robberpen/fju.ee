@@ -153,7 +153,7 @@ $.ajax({
   type: "POST",
   dataType: "json",
   success: function(data) {
-	layout= '<table border="1" align=center bgcolor=#eeeeee width=90%> ';
+	layout= '<table border="2" align=center frame=box bgcolor=#eeeeee width=90%> ';
 	console.log("size: " +  data.length);
 	$.each( data, function( i, item ) {
 		layout += "<tr board=1><td>" + item[0].TreeID + "</td><td>" + item[0].TreeDescription + "</td>";

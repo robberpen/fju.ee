@@ -2,7 +2,7 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<title>Fju</title>
+	<title>智慧型節能空調監控系統</title>
 	<link href="flot/examples/examples.css" rel="stylesheet" type="text/css">
 	<!--[if lte IE 8]><script language="javascript" type="text/javascript" src="../../excanvas.min.js"></script><![endif]-->
 	<script language="javascript" type="text/javascript" src="flot/jquery.js"></script>
@@ -23,11 +23,11 @@
 </div>
 <form method=POST action="fju_mysql_adv.php">
   <div id="tab"> </div>
-<br><h4>Quickly:</h4>
-<input type=button name=quick_hourly value=Hourly onclick="quick_hourly_show()">
-<input type=button name=quick_daily value=Daily onclick="quick_daily_show()" >
-<input type=button name=quick_weekly value=Weekly onclick="quick_weekly_show()">
-<input type=button name=quick_monthly value=Monthly onclick="quick_monthly_show()">
+<br><h4>快速繪圖:</h4>
+<input type=button name=quick_hourly value="最近一小時" onclick="quick_hourly_show()">
+<input type=button name=quick_daily value="最近一天" onclick="quick_daily_show()" >
+<input type=button name=quick_weekly value="最近一週" onclick="quick_weekly_show()">
+<input type=button name=quick_monthly value="最近一個月" onclick="quick_monthly_show()">
 <br><br><hr color=#011; background-color=#f00; height= 5px><br>
 <!-- Display Interval<select name="interval">
   <option>hourly</option>
@@ -35,19 +35,17 @@
   <option>weekly</option>
   <option>monthly</option>
 </select> -->
-<h4>Advance:</h4>
-Start Day: <input type="date" name=start_date>
-Hour: <input type=text name=start_hour><br>
-End Day: <input type="date" name=end_date>
-Hour: <input type=text name=end_hour><br>
-Peroid:  <input type=text name=peroid> record per minutes<br> total: <input type=text name=records value=120>
-&nbsp;&nbsp;<input type="button" onclick="redraw()" value="Query" id="query">&nbsp;&nbsp;&nbsp;&nbsp;
+<h4>進階自定繪圖:</h4><br>
+開時日期: <input type="date" name=start_date>
+開時時間(小時): <input type=text name=start_hour><br><br>
+結束時日期: <input type="date" name=end_date>
+結束時間(小時): <input type=text name=end_hour><br><br>
+平圴每隔<input type=text name=peroid>分一筆<br><br>
+共<input type=text name=records value=120>筆資料<br><br>
+&nbsp;&nbsp;<input type="button" onclick="redraw()" value="繪圖" id="query">&nbsp;&nbsp;&nbsp;&nbsp;
 &nbsp;&nbsp;<input type="button" onclick="show()" value="debug" id="devel_debug">&nbsp;&nbsp;&nbsp;&nbsp;
-&nbsp;&nbsp;&nbsp;&nbsp;
-		<br><br><hr color=#f00; background-color=#f00; height= 5px><br>
 </form>
 </center>
-<div id="debug2"></div>
  
 	<div id="footer">
 		Copyright &copy; 2013 - 2013 fju.edu.tw

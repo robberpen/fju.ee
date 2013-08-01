@@ -92,7 +92,7 @@ function draw_data($param, $tree, $leaf)
 	$rows = array();
 	//$rows = array("TreeID" =>$tree, "LeafID" => $leaf);
 	//$rows[] = ["LeafID" => $leaf ];
-	$test = 0;
+	//$test = 0;
 	for ($i  = 0;  $param->start_time < $param->end_time; $i += $param->peroid)
 	{
 		if (!$limit--)
@@ -122,8 +122,8 @@ function draw_data($param, $tree, $leaf)
 		//$row = array();
 		while($r = mysql_fetch_assoc($result)) {
 		    if ($test++ == 3) {
-			$rows[] = array('Status' => 'abnormal', 'Data'=>$r['data']);
-			//$rows[] = $r['data'];
+			//$rows[] = array('Status' => 'abnormal', 'Data'=>$r['data']);
+			$rows[] = $r['data'];
 		    } else
 			$rows[] = $r['data'];
 		}
