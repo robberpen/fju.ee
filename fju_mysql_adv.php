@@ -63,6 +63,26 @@ class param{
 	}
 };
 
+function get_data_irregular($where)
+{
+	$q = 'SELECT Status FROM Data ' . $where . " AND Status != 'regular'";
+	//echo $q. "<br>";
+	$result = mysql_query($q);
+	//$result = mysql_query('SELECT * FROM temp ORDER BY time DESC LIMIT 0 , 60');
+	if (!$result) {
+	    die('Invalid query: ' . mysql_error());
+	}
+	//$num_rows = mysql_num_rows($result);
+	//echo "num: ". $num_rows . "<br>\n";
+	if (mysql_num_rows($result) > 0)
+		return mysql_fetch_assoc($result);
+	return array('Status' => 'regular');
+	//$row = array();
+	//while($r = mysql_fetch_assoc($result)) {
+	//    $rows[] = $r['data'];
+	//}
+
+}
 function data_irregular($where)
 {
 	$q = 'SELECT Status FROM Data ' . $where . " AND Status != 'regular'";
@@ -121,11 +141,12 @@ function draw_data($param, $tree, $leaf)
 		}
 		//$row = array();
 		while($r = mysql_fetch_assoc($result)) {
-		    if ($test++ == 3) {
+			$rows[] = array_merge(array('Data' =>$r['data']), get_data_irregular($where));
+		 //   if ($test++ == 3) {
 			//$rows[] = array('Status' => 'abnormal', 'Data'=>$r['data']);
-			$rows[] = $r['data'];
-		    } else
-			$rows[] = $r['data'];
+		//	$rows[] = $r['data'];
+		   // } else
+		//	$rows[] = $r['data'];
 		}
 		//$rows[] = $row;
 		//print json_encode($rows);

@@ -1,3 +1,9 @@
+function next_page()
+{
+	document.forms[0].action = "fju_layout.php";
+	document.forms[0].submit();
+
+}
 function quick_hourly_show()
 {
 	//document.forms[0].action = "fju_quick_show.php";
@@ -32,25 +38,12 @@ function show()
 	alert("update: " +  $("form").serialize());
 	document.forms[0].submit();
 }
-function redraw()
+function __redraw(__data)
 {
-	if (document.getElementsByName("peroid")[0].value < 1)
-		document.getElementsByName("peroid")[0].value = 1;
-	var n = 0;
-	$("input[name='draw[]']").each(function() {
-		if ($(this).attr("checked")) {
-			n += 1;
-		}
-	});
-	if (n == 0) {
-		alert("no data selected");
-		return;
-	}
-	//alert($("form").serialize());
 	$.ajax({
 	url: "fju_mysql_adv.php",
 	type: "POST",
-	data:  $("form").serialize(),
+	data:  __data,
 	dataType: "json",
 	success: function(data) {
 		//alert("success");
@@ -91,7 +84,8 @@ function redraw()
 				var item_data = 0;
 				if (typeof item[0][i] == 'object') {
 					item_data = item[0][i]?item[0][i]['Data']:null;
-					error.push([ms, item_data]);
+					if (item[0][i]['Status'] != 'regular')
+						error.push([ms, item_data]);
 				} else {
 					item_data = item[0][i];
 				}
@@ -145,6 +139,27 @@ function redraw()
 	});
 	//setInterval(redraw, document.getElementsByName("peroid")[0].value * 60000);
 }
+function redraw()
+{
+	if (document.getElementsByName("peroid")[0].value < 1)
+		document.getElementsByName("peroid")[0].value = 1;
+	var n = 0;
+	$("input[name='draw[]']").each(function() {
+		if ($(this).attr("checked")) {
+			n += 1;
+		}
+	});
+	if (n == 0) {
+		alert("no data selected");
+		return;
+	}
+	__redraw($("form").serialize());
+}
+
+function update_draw(__data)
+{
+	__redraw(__data);
+}
 function fetch() {
 //document.getElementsByName('start_hour')[0].value = 2;
 //document.getElementsByName('end_hour')[0].value = 2;
@@ -173,7 +188,7 @@ $.ajax({
 			else
 				st_icon = "<img src=images/120px-Red_Light_Icon.svg.png width=30px height=30px ></img>";
 
-			layout += "<td><input type=checkbox name=\"draw[]\" value=" + val.TreeID + "-" + val.LeafID  + "-" + val.Type + ">" + val.LeafID + " " + icon + ": " + val.LeafDescription +  ":<font color=green size=5px> " + val.Data + "</font>" + st_icon + "</td>";
+			layout += "<td><input type=checkbox name=\"draw[]\" value=" + val.TreeID + "-" + val.LeafID  + "-" + val.Type + ">" + val.LeafID + " " + icon + ": " + val.LeafDescription +  ":<font color=green size=5px> " + val.Data + "</font><br><center>" + st_icon + "</center></td>";
 			//document.getElementById('debug').innerHTML += "->key: " +  i  + "|" + val.TreeID + "|LeafID: " + val.LeafID + "</br>";
 		});
 		layout += "</tr>";
