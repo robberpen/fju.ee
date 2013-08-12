@@ -16,17 +16,24 @@
 	<script type="text/javascript" src="flot/jquery.flot.axislabels.js"></script>
 	<script language="javascript" type="text/javascript" src="fju_layout.js"></script>
 	<script type="text/javascript">
-
-
+	</script>
+	<script>
+	function ondraw_update(){
+		$("#setup").hide();
+		//$("#position").val("test ok");
+		update_draw('<?php echo http_build_query($_POST); ?>');
+	}
 	</script>
 </head>
-<body onload=fetch()>
+<body onload=ondraw_update()>
 <br><br>
 <center>
 <div id=paint>
 </div>
 <form method=POST action="fju_mysql_adv.php">
   <div id="tab"> </div>
+<input type=text id="position">
+<div id=setup>
 <br><h4>快速繪圖:</h4>
 <input type=button name=quick_hourly value="最近一小時" onclick="quick_hourly_show()">
 <input type=button name=quick_daily value="最近一天" onclick="quick_daily_show()" >
@@ -47,9 +54,13 @@
 平圴每隔<input type=text name=peroid>分一筆<br><br>
 共<input type=text name=records value=120>筆資料<br><br>
 &nbsp;&nbsp;<input type="button" onclick="redraw()" value="繪圖" id="query">&nbsp;&nbsp;&nbsp;&nbsp;
-&nbsp;&nbsp;<input type="button" onclick="next_page()" value="繪圖" id="query">&nbsp;&nbsp;&nbsp;&nbsp;
 &nbsp;&nbsp;<input type="button" onclick="show()" value="debug" id="devel_debug">&nbsp;&nbsp;&nbsp;&nbsp;
+</div>
 </form>
+<?php
+	//echo http_build_query($_POST);
+	//var_dump($_POST);
+?>
 </center>
  
 	<div id="footer">

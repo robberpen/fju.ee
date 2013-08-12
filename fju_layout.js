@@ -96,7 +96,7 @@ function __redraw(__data)
 			//$.plot("#xyz" + index, [ {data: happy, label: item.TreeID + "-" + item.LeafID + " " + item.start, color:  "#033", points: { show: true },lines: { show: true },}], {
 			//$.plot("#xyz" + index, [ {data: happy, label: item.TreeID + "-" + item.LeafID + " " + item.start, color:  "#033", points: { show: true },lines: { show: true }}, {data: half}], {
 			//$.plot("#xyz" + index, [ {data: happy, label: item.TreeID + "-" + item.LeafID + " " + item.start, color:  "#033"}, {data: half}], {
-			$.plot("#xyz" + index, [ {data: happy, label: item.TreeID + "-" + item.LeafID + " " + item.start, color:  "#033"},  {data: error, color: "#ff0000"}], {
+			$.plot("#xyz" + index, [ {data: happy, label: item.TreeID + "-" + item.LeafID + " " + item.start, color:  "#033",  points: { show: true },},  {data: error, color: "#ff0000"}], {
 				series: {
 					bars: {
 						show: true,
@@ -113,20 +113,25 @@ function __redraw(__data)
 					tickLength: 0,
 				clickable:true,
 				hoverable: true,
+				axisLabelUseCanvas: true,
+				axisLabelFontSizePixels: 20,
+				axisLabelFontFamily: 'Verdana, Arial',
+				axisLabel: "時間",
 				},
 				yaxis: {
 			    //color: "black",
 			    tickDecimals: 2,
-			    //axisLabel: "Gold Price  in USD/oz",
+			    axisLabel: "溫度",
 			    axisLabelUseCanvas: true,
-			    axisLabelFontSizePixels: 12,
+			    axisLabelFontSizePixels: 20,
 			    axisLabelFontFamily: 'Verdana, Arial',
 			    min:18,
 			    max:42,
 			    axisLabelPadding: 5
 				},
-				grid: { backgroundColor: { colors: ["#aaffff", "#ffffee"] } },
+				grid: { backgroundColor: { colors: ["#aaffff", "#ffffee"] },  hoverable: true, axisMargin: 20 },
 			});
+			$("#xyz" + index).UseTooltip();
 			
 		});
 		/* output */
@@ -202,4 +207,53 @@ $.ajax({
 	}
     });
 	document.getElementById('tab').innerHTML += "</table>";
+}
+var previousPoint = null, previousLabel = null;
+$.fn.UseTooltip = function () {
+    $(this).bind("plothover", function (event, pos, item) {
+	//console.log("itm: " + "xxx" + ", index: " + item.dataIndex );
+	/* http://people.iola.dk/olau/flot/API.txt
+	 * https://github.com/flot/flot/blob/master/API.md
+	 */
+	//console.log("itm: " + event + " pos.x " + pos.x +  "pos.y" + pos.y + " item " + item);
+        if (item) {
+	console.log("itm: " + event + " pos.x " + pos.x +  "pos.y" + pos.y + " item " + item);
+	    //$("#position").val("test PTM");
+            if ((previousLabel != item.series.label) || (previousPoint != item.dataIndex)) {
+                previousPoint = item.dataIndex;
+                previousLabel = item.series.label;
+                $("#tooltip").remove();
+                
+                var x = item.datapoint[0];
+                var y = item.datapoint[1];
+                var date = new Date(x);
+                var color = item.series.color;
+
+                showTooltip(item.pageX, item.pageY, color,
+                            "<strong>" + item.series.label + "</strong><br>"  +
+                            (date.getMonth() + 1) + "/" + date.getDate() + " " + date.getHours() + ":" + date.getUTCMinutes() + 
+                            " : <strong>" + y + "</strong>");
+            }
+        } else {
+		//alert("222test");
+            $("#tooltip").remove();
+            previousPoint = null;
+        }
+    });
+};
+
+function showTooltip(x, y, color, contents) {
+    $('<div id="tooltip">' + contents + '</div>').css({
+        position: 'absolute',
+        display: 'none',
+        top: y - 40,
+        left: x - 120,
+        border: '2px solid ' + color,
+        padding: '3px',
+        'font-size': '9px',
+        'border-radius': '5px',
+        'background-color': '#fff',
+        'font-family': 'Verdana, Arial, Helvetica, Tahoma, sans-serif',
+        opacity: 0.9
+    }).appendTo("body").fadeIn(200);
 }
