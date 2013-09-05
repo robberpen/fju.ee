@@ -57,6 +57,7 @@ function debug_post_php() {
  * 4. Process hover event for popon the date info of current mouse position
  */
 function __redraw(__serialize) {
+    //$("#tabs-2").tabs("enable", 1);
     $.ajax({
         url: "fju_mysql_adv.php",
         type: "POST",
@@ -118,11 +119,16 @@ function __redraw(__serialize) {
                     label: item.TreeID + "-" + item.LeafID + " " + item.start,
                     color: "#033",
                     points: {
+                        fillColor: "#033",
                         show: true
-                    },
+                    }
                 }, {
                     data: error,
-                    color: "#ff0000"
+                    color: "#ff0000",
+                    points: {
+                        fillColor: "#ff0000",
+                        show: true
+                    }
                 }], {
                     series: {
                         bars: {
@@ -176,6 +182,7 @@ function __redraw(__serialize) {
         }
     });
     //setInterval(redraw, document.getElementsByName("peroid")[0].value * 60000);
+    //$( ".s" ).tabs( "enable" );
 }
 var previousPoint = null,
     previousLabel = null;
@@ -200,8 +207,8 @@ $.fn.UseTooltip = function() {
                 var color = item.series.color;
 
                 showTooltip(item.pageX, item.pageY, color,
-                    "<strong>" + item.series.label + "<br>" +
-                    (date.getMonth() + 1) + "/" + date.getDate() + " " + date.getHours() + ":" + date.getUTCMinutes() +
+                    "<strong>" +
+                    (date.getMonth() + 1) + "/" + date.getDate() + " " + date.getUTCHours() + ":" + date.getUTCMinutes() +
                     " :" + y + " 度</strong>");
             }
         } else {
@@ -269,13 +276,14 @@ function topology() {
                 $.each(item[1], function(i, val) {
                     /* which type with icon */
                     if (val.Type == 'temperature')
-                        icon = '<img src=images/icon_tempSensor_60px.png width=30px height=30px></img>';
+                        icon = val.Status == 'regular' ? '<img src=images/icon_tempSensor_60px_green.png width=30px height=30px></img>':'<img src=images/icon_tempSensor_60px_red.png width=30px height=30px></img>';
                     else if (val.Type == 'watt')
-                        icon = "<img src=images/icon_powerModule_60px.png width=30px height=30px></img>";
+                        icon = val.Status == 'regular' ? '<img src= images/icon_powerModule_60px_green.png width=30px height=30px></img>':'<img src= images/icon_powerModule_60px_red.png width=30px height=30px></img>';
                     else if (val.Type == 'root')
                         icon = "<img src=images/icon_computer_60px.png width=30px height=30px ></img>";
                     else
-                        icon = val.Type;
+                        icon = val.Status == 'regular' ? '<img src=images/icon_tempSensor_60px_green.png width=30px height=30px></img>':'<img src=images/icon_tempSensor_60px_red.png width=30px height=30px></img>';
+                        //icon = val.Type;
 
                     /* status with icon */
                     if (val.Status == 'regular')
@@ -283,7 +291,7 @@ function topology() {
                     else
                         st_icon = "<img src=images/120px-Red_Light_Icon.svg.png width=30px height=30px ></img>";
 
-                    layout += "<td><input type=checkbox name=\"draw[]\" value=" + val.TreeID + "-" + val.LeafID + "-" + val.Type + ">" + val.LeafID + " " + icon + ": " + val.LeafDescription + ":<font color=green size=5px> " + val.Data + "</font><br><center>" + st_icon + "</center></td>";
+                    layout += "<td><input type=checkbox name=\"draw[]\" value=" + val.TreeID + "-" + val.LeafID + "-" + val.Type + ">" + val.LeafID + icon + ": " + val.LeafDescription + ":<font color=" + (val.Status == 'regular' ?'green':'red') + " size=5px>" + val.Data + "</font><br><center>" + "</center></td>";
                     //document.getElementById('debug').innerHTML += "->key: " +  i  + "|" + val.TreeID + "|LeafID: " + val.LeafID + "</br>";
                 });
                 layout += "</tr>";
