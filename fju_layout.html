@@ -28,6 +28,15 @@
   $(function() {
     $( "#tabs" ).tabs();
   });
+  $(function() {
+    $( document ).tooltip();
+  });
+  function change_tab(){
+    alert("Ba..");
+	 var tabs = $('#tabs').tabs();
+	tabs.tabs('option', 'active', 1);
+    alert("bad");
+  }
   </script>
   </script>
 </head>
@@ -38,28 +47,33 @@
     <li><a href="#tabs-1">狀態</a></li>
     <li><a href="#tabs-2">圖表</a></li>
     <li><a href="#tabs-3">帳號管理</a></li>
+    <li><a href="#tabs-4">Test</a></li>
   </ul>
-  <div id="tabs-3"><center><table>
+  <div id="tabs-3"><center>
+	<form method=GET action=fju_admin.php>
+	<table>
 	<tr><td><p>更改帳號: </p></td><td width=200px><p><input type=text name=new_account></p></td><td><p align=center>簡訊</p></td></tr>
-	<tr><td><p>舊密碼: </p></td><td><p><input type=password name=old_pass></p></td><td><p>1. <input type=text name=contact1> </p></td>
-	<tr><td><p>新密碼: </p></td><td><p><input type=password name=new_pass></p></td><td><p>2. <input type=text name=contact1> </p></td>
-	<tr><td><p>E-Mail: </p></td><td><p><input type=text name=email></p></td><td><p>3. <input type=text name=contact1> </p></td>
+	<tr><td><p>舊密碼: </p></td><td><p><input type=password name=old_pass></p></td><td><p>1. <input type=text name=contact1> </p></td><td><p>4. <input type=text name=contact1> </p></td></tr>
+	<tr><td><p>新密碼: </p></td><td><p><input type=password name=new_pass></p></td><td><p>2. <input type=text name=contact1> </p></td><td><p>5. <input type=text name=contact1> </p></td></tr>
+	<tr><td><p>E-Mail: </p></td><td><p><input type=text name=email></p></td><td><p>3. <input type=text name=contact1> </p></td><td><p>6. <input type=text name=contact1> </p></td></tr>
 	</table>
+	<input type=button value=送出>
 	</center>
+	</form>
   </div>
-
 <div id="tabs-1">
-<br><br>
 <center>
-<div id=paint>
-</div>
 <form method=POST action="fju_mysql_adv.php">
-  <div id="tab"> </div>
 <br><h4>快速繪圖: </h4>
 <input type=button name=quick_hourly value="最近一小時" onclick="quick_hourly_show()">
 <input type=button name=quick_daily value="最近一天" onclick="quick_daily_show()" >
 <input type=button name=quick_weekly value="最近一週" onclick="quick_weekly_show()">
-<input type=button name=quick_monthly value="最近一個月" onclick="quick_monthly_show()">
+<input type=button name=quick_monthly value="最近一個月" onclick="quick_monthly_show()"><br>
+<input type=button name=quick_monthly value="日報表" onclick="quick_monthly_show()" title="從0:00到現在，每小時平圴值為一筆">
+<input type=button name=quick_monthly value="週報表" onclick="quick_monthly_show()" title="本週報表，從星期日到今天，每天平圴值為一筆">
+<input type=button name=quick_monthly value="月報表" onclick="quick_monthly_show()" title="從這個月到今天，每天平圴值為一筆">
+<br><br><hr color=#011; background-color=#f00; height= 5px><br>
+  <div id="tab"> </div>
 <br><br><hr color=#011; background-color=#f00; height= 5px><br>
 <!-- Display Interval<select name="interval">
   <option>hourly</option>
@@ -68,6 +82,7 @@
   <option>monthly</option>
 </select> -->
 <h4>進階自定繪圖: </h4><br>
+<input id="age" title="We ask for your age only for statistical purposes." />
 開時日期: <input type="date" name=start_date>
 開時時間(小時): <input type=text name=start_hour><br><br>
 結束時日期: <input type="date" name=end_date>
@@ -81,6 +96,13 @@
 </form>
 </center>
 </div> <!-- tabl-1 -->
+<div id=tabs-2>
+<div id=paint>
+</div>
+</div>
+	<div id="tabs-4">
+		<input type=button value=try onclick="change_tab();">
+	</div>
 </div> <!-- tabs -->
 	<div id="footer">
 		Copyright &copy; 2013 - 2013 fju.edu.tw

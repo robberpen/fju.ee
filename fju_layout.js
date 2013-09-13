@@ -69,6 +69,7 @@ function __redraw(__serialize) {
             var painter = "";
             for (var i = 0; i < data.length; i++) {
                 painter += '<div class="demo-container">';
+                painter += "<center>Test ok</center>";
                 painter += '<div id="xyz' + i + '" class="demo-placeholder"></div>';
                 painter += '</div>';
             }
@@ -248,10 +249,14 @@ function redraw() {
         alert("no data selected");
         return;
     }
+    var tabs = $('#tabs').tabs();
+	tabs.tabs('option', 'active', 1);
     __redraw($("form").serialize());
 }
 
 function update_draw(__data) {
+    var tabs = $('#tabs').tabs();
+	tabs.tabs('option', 'active', 1);
     __redraw(__data);
 }
 
@@ -291,7 +296,8 @@ function topology() {
                     else
                         st_icon = "<img src=images/120px-Red_Light_Icon.svg.png width=30px height=30px ></img>";
 
-                    layout += "<td><input type=checkbox name=\"draw[]\" value=" + val.TreeID + "-" + val.LeafID + "-" + val.Type + ">" + val.LeafID + icon + ": " + val.LeafDescription + ":<font color=" + (val.Status == 'regular' ?'green':'red') + " size=5px>" + val.Data + "</font><br><center>" + "</center></td>";
+                    layout += "<td><input type=checkbox name=\"draw[]\" value=" + val.TreeID + "-" + val.LeafID + "-" + val.Type + ">" + val.LeafID + icon + ": " + val.LeafDescription + ":<font color=" + (val.Status == 'regular' ?'green':'red') + " size=5px>" + val.Data + "</font><br><input type=button id=cmd  value=測試 title=測試燈號><input type=button id=cmd value=清除 title=清除測試燈號></td>";
+
                     //document.getElementById('debug').innerHTML += "->key: " +  i  + "|" + val.TreeID + "|LeafID: " + val.LeafID + "</br>";
                 });
                 layout += "</tr>";
