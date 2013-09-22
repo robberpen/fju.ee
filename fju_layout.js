@@ -260,7 +260,14 @@ function update_draw(__data) {
     __redraw(__data);
 }
 
-
+function event_test()
+{
+    alert("ttttttttt");
+}
+function event_reset()
+{
+    alert("vvvvvv");
+}
 /***********************************************************
  * Fetch the topology from Database to layout 
  ***********************************************************/
@@ -296,7 +303,9 @@ function topology() {
                     else
                         st_icon = "<img src=images/120px-Red_Light_Icon.svg.png width=30px height=30px ></img>";
 
-                    layout += "<td><input type=checkbox name=\"draw[]\" value=" + val.TreeID + "-" + val.LeafID + "-" + val.Type + ">" + val.LeafID + icon + ": " + val.LeafDescription + ":<font color=" + (val.Status == 'regular' ?'green':'red') + " size=5px>" + val.Data + "</font><br><input type=button id=cmd  value=測試 title=測試燈號><input type=button id=cmd value=清除 title=清除測試燈號></td>";
+                    layout += "<td><input type=checkbox name=\"draw[]\" value=" + val.TreeID + "-" + val.LeafID + "-" + val.Type + ">" + val.LeafID + icon + ": " + val.LeafDescription + ":<font color=" + (val.Status == 'regular' ?'green':'red') + " size=5px>" + val.Data + "</font><br>";
+                    layout += "<input type=button id=cmd onclick=\"event_test();\" value=測試 title=測試燈號 name=" + val.TreeID + "-" + val.LeafID + " >";
+                    layout += "<input type=button id=cmd onclick=\"event_reset();\" value=清除 title=清除測試燈號 name=" + val.TreeID + "-" + val.LeafID + " ></td>";
 
                     //document.getElementById('debug').innerHTML += "->key: " +  i  + "|" + val.TreeID + "|LeafID: " + val.LeafID + "</br>";
                 });
