@@ -260,17 +260,30 @@ function update_draw(__data) {
     __redraw(__data);
 }
 
-function event_test()
-{
-    alert("ttttttttt");
-}
-function event_reset()
-{
-    alert("vvvvvv");
-}
+
 /***********************************************************
  * Fetch the topology from Database to layout 
  ***********************************************************/
+function event_led(id)
+{
+    /* id.vame format defined as  "<TreeID>-<LeafID>-<test|reset>"
+     * eg: "5-2-test", eg: "1-3-reset"
+     */
+    //alert("test name: " + id.name  + ",value: " + id.value);
+    $.ajax({
+        url: "fju_event.php",
+        type: "POST",
+        data: "item=" + id.name,
+        success: function(data) {
+            alert(data);    
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+            alert(xhr.status);
+            alert(thrownError);
+        }
+    });
+
+}
 function topology() {
     //document.getElementsByName('start_hour')[0].value = 2;
     //document.getElementsByName('end_hour')[0].value = 2;
@@ -304,8 +317,10 @@ function topology() {
                         st_icon = "<img src=images/120px-Red_Light_Icon.svg.png width=30px height=30px ></img>";
 
                     layout += "<td><input type=checkbox name=\"draw[]\" value=" + val.TreeID + "-" + val.LeafID + "-" + val.Type + ">" + val.LeafID + icon + ": " + val.LeafDescription + ":<font color=" + (val.Status == 'regular' ?'green':'red') + " size=5px>" + val.Data + "</font><br>";
-                    layout += "<input type=button id=cmd onclick=\"event_test();\" value=測試 title=測試燈號 name=" + val.TreeID + "-" + val.LeafID + " >";
-                    layout += "<input type=button id=cmd onclick=\"event_reset();\" value=清除 title=清除測試燈號 name=" + val.TreeID + "-" + val.LeafID + " ></td>";
+                    layout += "<input type=button id=cmd onclick=\"event_led(this);\" value=測試 title=測試燈號 name=" + val.TreeID + "-" + val.LeafID + "-test >";
+                    layout += "<input type=button id=cmd onclick=\"event_led(this);\" value=清除 title=清除測試燈號 name=" + val.TreeID + "-" + val.LeafID + "-reset ></td>";
+                    //layout += "<input type=button id=cmd  value=測試 title=測試燈號 name=" + val.TreeID + "-" + val.LeafID + " >";
+                    //layout += "<input type=button id=cmd  value=清除 title=清除測試燈號 name=" + val.TreeID + "-" + val.LeafID + " ></td>";
 
                     //document.getElementById('debug').innerHTML += "->key: " +  i  + "|" + val.TreeID + "|LeafID: " + val.LeafID + "</br>";
                 });
