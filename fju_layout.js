@@ -13,32 +13,32 @@ function next_page() {
     document.forms[0].submit();
 }
 
-function quick_hourly_show() {
+function quick_hourly_show(obj) {
     //document.forms[0].action = "fju_quick_show.php";
     document.getElementsByName("peroid")[0].value = 1;
     document.getElementsByName("records")[0].value = 60;
-    redraw();
+    redraw(obj);
 }
 
-function quick_daily_show() {
+function quick_daily_show(obj) {
     //document.forms[0].action = "fju_quick_show.php";
     document.getElementsByName("peroid")[0].value = 60;
     document.getElementsByName("records")[0].value = 24;
-    redraw();
+    redraw(obj);
 }
 
-function quick_weekly_show() {
+function quick_weekly_show(obj) {
     //document.forms[0].action = "fju_quick_show.php";
     document.getElementsByName("peroid")[0].value = 1440;
     document.getElementsByName("records")[0].value = 7;
-    redraw();
+    redraw(obj);
 }
 
-function quick_monthly_show() {
+function quick_monthly_show(obj) {
     //document.forms[0].action = "fju_quick_show.php";
     document.getElementsByName("peroid")[0].value = 1440;
     document.getElementsByName("records")[0].value = 31;
-    redraw();
+    redraw(obj);
     //show();
 }
 
@@ -56,7 +56,7 @@ function debug_post_php() {
  * 3. Make $.plot() Flot time series chart, they are two searies data, one from regular, another for irregular with RED color
  * 4. Process hover event for popon the date info of current mouse position
  */
-function __redraw(__serialize) {
+function __redraw(__serialize, obj) {
     //$("#tabs-2").tabs("enable", 1);
     $.ajax({
         url: "fju_mysql_adv.php",
@@ -69,7 +69,8 @@ function __redraw(__serialize) {
             var painter = "";
             for (var i = 0; i < data.length; i++) {
                 painter += '<div class="demo-container">';
-                painter += "<center>Test ok</center>";
+                //painter += "<center>"  + obj.value + item.TreeID + "-" + item.LeafID + "從" + item.start + " 開始</center>";
+                painter += "<center>"  + obj.value + "</center>";
                 painter += '<div id="xyz' + i + '" class="demo-placeholder"></div>';
                 painter += '</div>';
             }
@@ -117,7 +118,7 @@ function __redraw(__serialize) {
                 //$.plot("#xyz" + index, [ {data: happy, label: item.TreeID + "-" + item.LeafID + " " + item.start, color:  "#033"}, {data: half}], {
                 $.plot("#xyz" + index, [{
                     data: happy,
-                    label: item.TreeID + "-" + item.LeafID + " " + item.start,
+                    label: "位置 " + item.TreeID + "-" + item.LeafID + ", 從 " + item.start + "開始",
                     color: "#033",
                     points: {
                         fillColor: "#033",
@@ -236,7 +237,7 @@ function showTooltip(x, y, color, contents) {
     }).appendTo("body").fadeIn(200);
 }
 
-function redraw() {
+function redraw(obj) {
     if (document.getElementsByName("peroid")[0].value < 1)
         document.getElementsByName("peroid")[0].value = 1;
     var n = 0;
@@ -251,7 +252,7 @@ function redraw() {
     }
     var tabs = $('#tabs').tabs();
 	tabs.tabs('option', 'active', 1);
-    __redraw($("form").serialize());
+    __redraw($("form").serialize(), obj);
 }
 
 function update_draw(__data) {

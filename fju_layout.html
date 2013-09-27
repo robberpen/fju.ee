@@ -31,12 +31,6 @@
   $(function() {
     $( document ).tooltip();
   });
-  function change_tab(){
-    alert("Ba..");
-	 var tabs = $('#tabs').tabs();
-	tabs.tabs('option', 'active', 1);
-    alert("bad");
-  }
   </script>
   </script>
 </head>
@@ -47,7 +41,6 @@
     <li><a href="#tabs-1">狀態</a></li>
     <li><a href="#tabs-2">圖表</a></li>
     <li><a href="#tabs-3">帳號管理</a></li>
-    <li><a href="#tabs-4">Test</a></li>
   </ul>
   <div id="tabs-3"><center>
 	<form method=GET action=fju_admin.php>
@@ -65,13 +58,13 @@
 <center>
 <form method=POST action="fju_mysql_adv.php">
 <br><h4>快速繪圖: </h4>
-<input type=button name=quick_hourly value="最近一小時" onclick="quick_hourly_show()">
-<input type=button name=quick_daily value="最近一天" onclick="quick_daily_show()" >
-<input type=button name=quick_weekly value="最近一週" onclick="quick_weekly_show()">
-<input type=button name=quick_monthly value="最近一個月" onclick="quick_monthly_show()"><br>
-<input type=button name=quick_monthly value="日報表" onclick="quick_monthly_show()" title="從0:00到現在，每小時平圴值為一筆">
-<input type=button name=quick_monthly value="週報表" onclick="quick_monthly_show()" title="本週報表，從星期日到今天，每天平圴值為一筆">
-<input type=button name=quick_monthly value="月報表" onclick="quick_monthly_show()" title="從這個月到今天，每天平圴值為一筆">
+<input type=button name=quick_hourly value="最近一小時" onclick="quick_hourly_show(this)">
+<input type=button name=quick_daily value="最近一天" onclick="quick_daily_show(this)" >
+<input type=button name=quick_weekly value="最近一週" onclick="quick_weekly_show(this)">
+<input type=button name=quick_monthly value="最近一個月" onclick="quick_monthly_show(this)"><br>
+<input type=button name=quick_monthly value="日報表" onclick="quick_monthly_show(this)" title="從0:00到現在，每小時平圴值為一筆(Not work)">
+<input type=button name=quick_monthly value="週報表" onclick="quick_monthly_show(this)" title="本週報表，從星期日到今天，每天平圴值為一筆(Not Work)">
+<input type=button name=quick_monthly value="月報表" onclick="quick_monthly_show(this)" title="從這個月到今天，每天平圴值為一筆(Not work)">
 <br><br><hr color=#011; background-color=#f00; height= 5px><br>
   <div id="tab"> </div>
 <br><br><hr color=#011; background-color=#f00; height= 5px><br>
@@ -89,10 +82,12 @@
 結束時間(小時): <input type=text name=end_hour><br><br>
 平圴每隔<input type=text name=peroid>分一筆<br><br>
 共<input type=text name=records value=120>筆資料<br><br>
-&nbsp;&nbsp;<input type="button" onclick="redraw()" value="繪圖" id="query">&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;<input type="button" onclick="redraw(this)" value="繪圖" id="query">&nbsp;&nbsp;&nbsp;&nbsp;
+<!--
 &nbsp;&nbsp;<input type="button" onclick="next_page()" value="繪圖" id="query">&nbsp;&nbsp;&nbsp;&nbsp;
 &nbsp;&nbsp;<input type="button" onclick="debug_post_php()" value="debug" id="devel_debug">&nbsp;&nbsp;&nbsp;&nbsp;
 <p>Date: <input type="text" id="datepicker" /></p>
+-->
 </form>
 </center>
 </div> <!-- tabl-1 -->
@@ -100,9 +95,6 @@
 <div id=paint>
 </div>
 </div>
-	<div id="tabs-4">
-		<input type=button value=try onclick="change_tab();">
-	</div>
 </div> <!-- tabs -->
 	<div id="footer">
 		Copyright &copy; 2013 - 2013 fju.edu.tw
