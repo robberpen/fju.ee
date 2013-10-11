@@ -41,10 +41,21 @@ function quick_monthly_show(obj) {
     redraw(obj);
     //show();
 }
+function admin_get()
+{
 
+}
+function admin_update()
+{
+        alert("new_account " + document.getElementsByName("new_account")[0].value);
+        alert("old_pass " + document.getElementsByName("old_pass")[0].value);
+        alert("new_pass " + document.getElementsByName("new_pass")[0].value);
+
+        return false;
+}
 function debug_post_php() {
     alert("update: " + $("form").serialize());
-    document.forms[0].submit();
+    document.forms[1].submit();
 }
 
 /*
@@ -90,6 +101,16 @@ function __redraw(__serialize, obj) {
                 datetime = new Date(y0[0], y0[1] - 1, y0[2], d0[0], d0[1], 0, 0);
                 //datetime = new Date(2013, 0, 1, 0, 0, 0, 0);
                 var ms = datetime.getTime();
+                alert("Type: " + item.Type);
+
+                /* Tree or Temperature or watt*/
+                if (item.Type == 'tree')
+                    unit = "溫度(C)";
+                else if (item.Type == 'temperature')
+                    unit = "溫度(C)";
+                else
+                    unit = "瓦特(kW)";
+                    
                 console.log("data size: " + item[0].length + ",TreeID: " +
                     item.TreeID + ", LeafIF: " + item.LeafID + " ,start: " + item.start + " ,end: " + item.end +
                     ",minute:" + item.minute + ", type:" + item.Type);
@@ -118,7 +139,7 @@ function __redraw(__serialize, obj) {
                 //$.plot("#xyz" + index, [ {data: happy, label: item.TreeID + "-" + item.LeafID + " " + item.start, color:  "#033"}, {data: half}], {
                 $.plot("#xyz" + index, [{
                     data: happy,
-                    label: "位置 " + item.TreeID + "-" + item.LeafID + ", 從 " + item.start + "開始",
+                    label: "<font size=5px>位置 " + item.TreeID + "-" + item.LeafID + ", 從 " + item.start + "開始</font>",
                     color: "#033",
                     points: {
                         fillColor: "#033",
@@ -156,7 +177,7 @@ function __redraw(__serialize, obj) {
                     yaxis: {
                         //color: "black",
                         tickDecimals: 2,
-                        axisLabel: "溫度",
+                        axisLabel: unit,
                         axisLabelUseCanvas: true,
                         axisLabelFontSizePixels: 20,
                         axisLabelFontFamily: 'Verdana, Arial',
@@ -288,6 +309,7 @@ function event_led(id)
 function topology() {
     //document.getElementsByName('start_hour')[0].value = 2;
     //document.getElementsByName('end_hour')[0].value = 2;
+    
     $.ajax({
         url: "fju_mysql.php",
         type: "POST",
@@ -317,7 +339,7 @@ function topology() {
                     else
                         st_icon = "<img src=images/120px-Red_Light_Icon.svg.png width=30px height=30px ></img>";
 
-                    layout += "<td><input type=checkbox name=\"draw[]\" value=" + val.TreeID + "-" + val.LeafID + "-" + val.Type + ">" + val.LeafID + icon + ": " + val.LeafDescription + ":<font color=" + (val.Status == 'regular' ?'green':'red') + " size=5px>" + val.Data + "</font><br>";
+                    layout += "<td><input type=checkbox name=\"draw[]\" value=" + val.TreeID + "-" + val.LeafID + "-" + val.Type + ">" + val.LeafID + icon + "" + val.LeafDescription + "<font color=" + (val.Status == 'regular' ?'green':'red') + " size=5px>" + val.Data + "</font><br>";
                     layout += "<input type=button id=cmd onclick=\"event_led(this);\" value=測試 title=測試燈號 name=" + val.TreeID + "-" + val.LeafID + "-test >";
                     layout += "<input type=button id=cmd onclick=\"event_led(this);\" value=清除 title=清除測試燈號 name=" + val.TreeID + "-" + val.LeafID + "-reset ></td>";
                     //layout += "<input type=button id=cmd  value=測試 title=測試燈號 name=" + val.TreeID + "-" + val.LeafID + " >";

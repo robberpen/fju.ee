@@ -50,7 +50,7 @@
 	<tr><td><p>新密碼: </p></td><td><p><input type=password name=new_pass></p></td><td><p>2. <input type=text name=contact1> </p></td><td><p>5. <input type=text name=contact1> </p></td></tr>
 	<tr><td><p>E-Mail: </p></td><td><p><input type=text name=email></p></td><td><p>3. <input type=text name=contact1> </p></td><td><p>6. <input type=text name=contact1> </p></td></tr>
 	</table>
-	<input type=button value=送出>
+	<input type=button value=送出 onclick="admin_update()">
 	</center>
 	</form>
   </div>
@@ -83,11 +83,9 @@
 平圴每隔<input type=text name=peroid>分一筆<br><br>
 共<input type=text name=records value=120>筆資料<br><br>
 &nbsp;&nbsp;<input type="button" onclick="redraw(this)" value="繪圖" id="query">&nbsp;&nbsp;&nbsp;&nbsp;
-<!--
 &nbsp;&nbsp;<input type="button" onclick="next_page()" value="繪圖" id="query">&nbsp;&nbsp;&nbsp;&nbsp;
 &nbsp;&nbsp;<input type="button" onclick="debug_post_php()" value="debug" id="devel_debug">&nbsp;&nbsp;&nbsp;&nbsp;
 <p>Date: <input type="text" id="datepicker" /></p>
--->
 </form>
 </center>
 </div> <!-- tabl-1 -->
